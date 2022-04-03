@@ -3,26 +3,7 @@ package main
 import "fmt"
 
 func main(){
-  var input, reportInput uint
-
-  categories := []string{"Household", "Food", "Drinks"}
-
-  type item struct {
-    category uint
-    quantity uint
-    cost float64
-  }
-
-  itemMap := make(map[string]item)
-  itemMap["Fork"] = item{0, 4, 3.00}
-  itemMap["Plates"] = item{0, 4, 3.00}
-  itemMap["Cups"] = item{0, 5, 3.00}
-  itemMap["Bread"] = item{1, 2, 2.00}
-  itemMap["Cake"] = item{1, 3, 1.00}
-  itemMap["Coke"] = item{2, 5, 2.00}
-  itemMap["Sprite"] = item{2, 5, 2.00}
-
-  // Main loop
+  // Main loop with n as control
   var n uint
   for n < 8 {
 
@@ -42,213 +23,216 @@ func main(){
 
     switch input {
     
-    // View entire shopping list
-    case 1:
-      fmt.Println("")
-      fmt.Println("Shopping List Contents")
-      fmt.Println("======================")
-      for key, element := range itemMap {
-        fmt.Printf("Category: %v - Item: %v  Quantity: %v  Unit Cost: $%.2f\n", categories[element.category], key, element.quantity, element.cost)
-      }
-      
-    // Generate shopping list report
-    case 2:
-      fmt.Println("")
-      fmt.Println("Generate Report")
-      fmt.Println("===============")
-      fmt.Println("1. Total cost of each category")
-      fmt.Println("2. List of items by category")
-      fmt.Println("3. Main Menu")
-      fmt.Printf("Choose your report: ")
-      fmt.Scanln(&reportInput)
-
-      switch reportInput {
-
-      // Total cost of each category
+      // View entire shopping list
       case 1:
         fmt.Println("")
-        fmt.Println("Total cost by category")
+        fmt.Println("Shopping List Contents")
         fmt.Println("======================")
-        for index, elementOutside := range categories {
-          sum := 0.00
-          for _, elementInside := range itemMap {
-            if index == int(elementInside.category) {
-              sum = sum + (float64(elementInside.quantity) * elementInside.cost)
-            }
-          }
-          fmt.Printf("%v cost: $%.2f\n", elementOutside, sum)
+        for key, element := range itemMap {
+          fmt.Printf("Category: %v - Item: %v  Quantity: %v  Unit Cost: $%.2f\n", categories[element.category], key, element.quantity, element.cost)
         }
-
-      // List of items by category
+        
+      // Generate shopping list report
       case 2:
         fmt.Println("")
-        fmt.Println("List of items by category")
-        fmt.Println("=========================")
-        for index, elementOutside := range categories {
-          for key, elementInside := range itemMap {
-            if index == int(elementInside.category) {
-              fmt.Printf("Category: %v - Item: %v  Quantity: %v  Unit Cost: $%.2f\n", elementOutside, key, elementInside.quantity, elementInside.cost)
+        fmt.Println("Generate Report")
+        fmt.Println("===============")
+        fmt.Println("1. Total cost of each category")
+        fmt.Println("2. List of items by category")
+        fmt.Println("3. Main Menu")
+        fmt.Printf("Choose your report: ")
+        fmt.Scanln(&reportInput)
+
+        switch reportInput {
+
+        // Total cost of each category
+        case 1:
+          fmt.Println("")
+          fmt.Println("Total cost by category")
+          fmt.Println("======================")
+          for index, elementOutside := range categories {
+            sum := 0.00
+            for _, elementInside := range itemMap {
+              if index == int(elementInside.category) {
+                sum = sum + (float64(elementInside.quantity) * elementInside.cost)
+              }
+            }
+            fmt.Printf("%v cost: $%.2f\n", elementOutside, sum)
+          }
+
+        // List of items by category
+        case 2:
+          fmt.Println("")
+          fmt.Println("List of items by category")
+          fmt.Println("=========================")
+          for index, elementOutside := range categories {
+            for key, elementInside := range itemMap {
+              if index == int(elementInside.category) {
+                fmt.Printf("Category: %v - Item: %v  Quantity: %v  Unit Cost: $%.2f\n", elementOutside, key, elementInside.quantity, elementInside.cost)
+              }
             }
           }
+
+        // Back to Main Menu
+        case 3:
+          break
         }
 
-      // Back to Main Menu
+      // Add items information
       case 3:
-        break
-      }
+        var itemName, itemCategory string
+        var itemUnits uint
+        var itemCost float64
+        
+        fmt.Println("")
+        fmt.Println("Add item")
+        fmt.Println("========")
+        fmt.Println("What is the name of your item?")
+        fmt.Scanln(&itemName)
+        fmt.Println("What category does it belong to?")
+        fmt.Scanln(&itemCategory)
+        fmt.Println("How many units are there?")
+        fmt.Scanln(&itemUnits)
+        fmt.Println("How much does it cost per unit?")
+        fmt.Scanln(&itemCost)
 
-    // Add items information
-    case 3:
-      var itemName, itemCategory string
-      var itemUnits uint
-      var itemCost float64
-      
-      fmt.Println("")
-      fmt.Println("Add item")
-      fmt.Println("========")
-      fmt.Println("What is the name of your item?")
-      fmt.Scanln(&itemName)
-      fmt.Println("What category does it belong to?")
-      fmt.Scanln(&itemCategory)
-      fmt.Println("How many units are there?")
-      fmt.Scanln(&itemUnits)
-      fmt.Println("How much does it cost per unit?")
-      fmt.Scanln(&itemCost)
-
-      // Search through slice to find index value of category
-      var cat uint
-      for index, element := range categories {
-        if itemCategory == element {
-          cat = uint(index)
-        }
-      }
-
-      itemMap[itemName] = item{cat, itemUnits, itemCost}
-
-    // Modify existing items
-    case 4:
-      var itemName, newName, newCategory string
-      var newQuantity uint
-      var newCost float64
-
-      fmt.Println("")
-      fmt.Println("Modify item")
-      fmt.Println("===========")
-      fmt.Printf("Which item do you wish to modify? ")
-      fmt.Scanln(&itemName)
-
-      fmt.Printf("Category: %v - Item: %v  Quantity: %v  Unit Cost: $%.2f\n", categories[itemMap[itemName].category], itemName, itemMap[itemName].quantity, itemMap[itemName].cost)
-
-      fmt.Println("")
-      fmt.Println("Enter new name. Enter for no change.")
-      fmt.Scanln(&newName)
-      fmt.Println("Enter new category. Enter for no change.")
-      fmt.Scanln(&newCategory)
-      fmt.Println("Enter new quantity. Enter for no change.")
-      fmt.Scanln(&newQuantity)
-      fmt.Println("Enter new unit cost. Enter for no change.")
-      fmt.Scanln(&newCost)
-
-      // Change name
-      if newName == "" {
-        fmt.Println("No changes to name made.")
-      } else {
-        itemMap[newName] = item{itemMap[itemName].category, itemMap[itemName].quantity, itemMap[itemName].cost}
-        delete(itemMap, itemName)
-        // Make sure all other fields are updating the right item
-        itemName = newName
-      }
-
-      if newCategory == "" {
-        fmt.Println("No changes to category made.")
-      } else {
         // Search through slice to find index value of category
         var cat uint
         for index, element := range categories {
-          if newCategory == element {
+          if itemCategory == element {
             cat = uint(index)
           }
         }
 
-        itemMap[itemName] = item{cat, itemMap[itemName].quantity, itemMap[itemName].cost}
-      }
+        itemMap[itemName] = item{cat, itemUnits, itemCost}
 
-      if newQuantity == 0 {
-        fmt.Println("No changes to quantity made.")
-      } else {
-        itemMap[itemName] = item{itemMap[itemName].category, newQuantity, itemMap[itemName].cost}
-      }
+      // Modify existing items
+      case 4:
+        var itemName, newName, newCategory string
+        var newQuantity uint
+        var newCost float64
 
-      if newCost == 0.0 {
-        fmt.Println("No changes to cost made.")
-      } else {
-        itemMap[itemName] = item{itemMap[itemName].category, itemMap[itemName].quantity, newCost}
-      }
+        fmt.Println("")
+        fmt.Println("Modify item")
+        fmt.Println("===========")
+        fmt.Printf("Which item do you wish to modify? ")
+        fmt.Scanln(&itemName)
 
-    // Delete item
-    case 5:
-      var itemDelete string
-      
-      fmt.Println("")
-      fmt.Println("Delete item")
-      fmt.Println("===========")
-      fmt.Printf("Enter item name to delete: ")
-      fmt.Scanln(&itemDelete)
+        fmt.Printf("Category: %v - Item: %v  Quantity: %v  Unit Cost: $%.2f\n", categories[itemMap[itemName].category], itemName, itemMap[itemName].quantity, itemMap[itemName].cost)
 
-      if _, found := itemMap[itemDelete]; found {
-        delete(itemMap, itemDelete)
-        fmt.Printf("Deleted %v\n", itemDelete)
-      } else {
-        fmt.Println("Item not found. Nothing to delete!")
-      }
+        fmt.Println("")
+        fmt.Println("Enter new name. Enter for no change.")
+        fmt.Scanln(&newName)
+        fmt.Println("Enter new category. Enter for no change.")
+        fmt.Scanln(&newCategory)
+        fmt.Println("Enter new quantity. Enter for no change.")
+        fmt.Scanln(&newQuantity)
+        fmt.Println("Enter new unit cost. Enter for no change.")
+        fmt.Scanln(&newCost)
 
-    // Print current data fields
-    case 6:
-      fmt.Println("")
-      fmt.Println("Print current data")
-      fmt.Println("==================")
-
-      if len(itemMap) == 0 {
-        fmt.Println("No data found!")
-      } else {
-        for key, element := range itemMap {
-          fmt.Printf("%v - %v\n", key, element)
+        // Change name
+        if newName == "" {
+          fmt.Println("No changes to name made.")
+        } else {
+          itemMap[newName] = item{itemMap[itemName].category, itemMap[itemName].quantity, itemMap[itemName].cost}
+          delete(itemMap, itemName)
+          // Make sure all other fields are updating the right item
+          itemName = newName
         }
-      }
 
-    // Add new category
-    case 7:
-      var newCat string
+        if newCategory == "" {
+          fmt.Println("No changes to category made.")
+        } else {
+          // Search through slice to find index value of category
+          var cat uint
+          for index, element := range categories {
+            if newCategory == element {
+              cat = uint(index)
+            }
+          }
 
-      fmt.Println("")
-      fmt.Println("Add new category")
-      fmt.Println("================")
-      fmt.Printf("What is the new category name to add? ")
-      fmt.Scanln(&newCat)
+          itemMap[itemName] = item{cat, itemMap[itemName].quantity, itemMap[itemName].cost}
+        }
 
-      if len(newCat) == 0 {
-        fmt.Println("No input found!")
-      } else {
+        if newQuantity == 0 {
+          fmt.Println("No changes to quantity made.")
+        } else {
+          itemMap[itemName] = item{itemMap[itemName].category, newQuantity, itemMap[itemName].cost}
+        }
 
-        // Search through slice to find index value of category
-        var catIndex int = -1
-        for index, element := range categories {
-          if newCat == element {
-            catIndex = index
+        if newCost == 0.0 {
+          fmt.Println("No changes to cost made.")
+        } else {
+          itemMap[itemName] = item{itemMap[itemName].category, itemMap[itemName].quantity, newCost}
+        }
+
+      // Delete item
+      case 5:
+        var itemDelete string
+        
+        fmt.Println("")
+        fmt.Println("Delete item")
+        fmt.Println("===========")
+        fmt.Printf("Enter item name to delete: ")
+        fmt.Scanln(&itemDelete)
+
+        if _, found := itemMap[itemDelete]; found {
+          delete(itemMap, itemDelete)
+          fmt.Printf("Deleted %v\n", itemDelete)
+        } else {
+          fmt.Println("Item not found. Nothing to delete!")
+        }
+
+      // Print current data fields
+      case 6:
+        fmt.Println("")
+        fmt.Println("Print current data")
+        fmt.Println("==================")
+
+        if len(itemMap) == 0 {
+          fmt.Println("No data found!")
+        } else {
+          for key, element := range itemMap {
+            fmt.Printf("%v - %v\n", key, element)
           }
         }
 
-        if catIndex == -1 {
-          categories = append(categories, newCat)
-          fmt.Printf("New category: %v added at index %v\n", newCat, len(categories) - 1)
+      // Add new category
+      case 7:
+        var newCat string
+
+        fmt.Println("")
+        fmt.Println("Add new category")
+        fmt.Println("================")
+        fmt.Printf("What is the new category name to add? ")
+        fmt.Scanln(&newCat)
+
+        if len(newCat) == 0 {
+          fmt.Println("No input found!")
         } else {
-          fmt.Printf("Category: %v already exists at index %v!\n", newCat, catIndex)
+
+          // Search through slice to find index value of category
+          var catIndex int = -1
+          for index, element := range categories {
+            if newCat == element {
+              catIndex = index
+            }
+          }
+
+          if catIndex == -1 {
+            categories = append(categories, newCat)
+            fmt.Printf("New category: %v added at index %v\n", newCat, len(categories) - 1)
+          } else {
+            fmt.Printf("Category: %v already exists at index %v!\n", newCat, catIndex)
+          }
+
         }
 
-      }
-    case 8:
-      n = input
-      break
+      // Exit
+      case 8:
+        n = input
+        break
+
     }
-}
+  }
 }
