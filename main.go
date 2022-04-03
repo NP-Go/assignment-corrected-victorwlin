@@ -5,7 +5,7 @@ import "fmt"
 func main(){
   // Main loop with n as control
   var n uint
-  for n < 8 {
+  for n < 9 {
 
     fmt.Println("")
     fmt.Println("Shopping List Application")
@@ -17,7 +17,8 @@ func main(){
     fmt.Println("5. Delete item")
     fmt.Println("6. Print current data")
     fmt.Println("7. Add new category name")
-    fmt.Println("8. Exit")
+    fmt.Println("8. Modify category")
+    fmt.Println("9. Exit")
     fmt.Printf("Select your choice: ")
     fmt.Scanln(&input)
 
@@ -228,8 +229,12 @@ func main(){
 
         }
 
-      // Exit
+      // Modify existing category
       case 8:
+        modifyCategory()
+
+      // Exit
+      case 9:
         n = input
         break
 
